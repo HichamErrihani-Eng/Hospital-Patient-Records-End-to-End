@@ -1,0 +1,13 @@
+{
+	"name": "LS_Http_GitHub",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://raw.githubusercontent.com/HichamErrihani-Eng/Hospital-Patient-Records-End-to-End/main/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

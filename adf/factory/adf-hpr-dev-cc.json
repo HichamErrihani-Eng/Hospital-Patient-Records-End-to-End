@@ -1,0 +1,16 @@
+{
+	"name": "adf-hpr-dev-cc",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true,
+			"isExplicitlySet": false
+		}
+	},
+	"location": "francecentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "1603edf4-e5b5-4c51-a7e7-5df9120deed5",
+		"tenantId": "e1acac36-d36e-4110-b428-2f456ddbd1b9"
+	}
+}

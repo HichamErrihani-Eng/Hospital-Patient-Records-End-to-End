@@ -1,0 +1,99 @@
+{
+	"name": "PL_Ingest_Raw_Data",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('FileList')",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Source_CSV",
+									"type": "DatasetReference",
+									"parameters": {
+										"FileName": "@item()"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_Sink_Raw_CSV",
+									"type": "DatasetReference",
+									"parameters": {
+										"FolderName": "@replace(item(), '.csv', '')",
+										"FileName": "@item()"
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"FileList": {
+				"type": "Array",
+				"defaultValue": [
+					"patients.csv",
+					"payers.csv",
+					"encounters.csv",
+					"procedures.csv"
+				]
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-11-24T20:30:56Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
