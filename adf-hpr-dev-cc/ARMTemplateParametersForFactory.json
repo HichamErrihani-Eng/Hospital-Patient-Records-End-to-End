@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-hpr-dev-cc"
+		},
+		"LS_ADLS_Raw_properties_typeProperties_url": {
+			"value": "https://sthprdevcc.dfs.core.windows.net/"
+		},
+		"LS_Http_GitHub_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/HichamErrihani-Eng/Hospital-Patient-Records-End-to-End/main/"
+		}
+	}
+}
