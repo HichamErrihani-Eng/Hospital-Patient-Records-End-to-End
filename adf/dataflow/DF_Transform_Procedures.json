@@ -1,0 +1,49 @@
+{
+	"name": "DF_Transform_Procedures",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LS_ADLS_Raw",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          START as string,",
+				"          STOP as string,",
+				"          PATIENT as string,",
+				"          ENCOUNTER as string,",
+				"          CODE as long,",
+				"          DESCRIPTION as string,",
+				"          BASE_COST as integer,",
+				"          REASONCODE as long,",
+				"          REASONDESCRIPTION as string",
+				"     ),",
+				"     useSchema: false,",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'raw',",
+				"     folderPath: 'procedures',",
+				"     fileName: 'procedures.csv',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true) ~> source1",
+				"source1 derive(DURATION = toInteger((unixTimestamp(STOP) - unixTimestamp(START)) / 60)) ~> derivedColumn1"
+			]
+		}
+	}
+}
