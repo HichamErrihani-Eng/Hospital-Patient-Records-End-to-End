@@ -232,6 +232,90 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Transform_Patients')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LS_ADLS_Raw",
+								"type": "LinkedServiceReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LS_ADLS_Raw",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Id as string,",
+						"          BIRTHDATE as date,",
+						"          DEATHDATE as date,",
+						"          PREFIX as string,",
+						"          FIRST as string,",
+						"          LAST as string,",
+						"          SUFFIX as string,",
+						"          MAIDEN as string,",
+						"          MARITAL as string,",
+						"          RACE as string,",
+						"          ETHNICITY as string,",
+						"          GENDER as string,",
+						"          BIRTHPLACE as string,",
+						"          ADDRESS as string,",
+						"          CITY as string,",
+						"          STATE as string,",
+						"          COUNTY as string,",
+						"          ZIP as short,",
+						"          LAT as double,",
+						"          LON as double",
+						"     ),",
+						"     useSchema: false,",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'delimited',",
+						"     fileSystem: 'raw',",
+						"     folderPath: 'patients',",
+						"     fileName: 'patients.csv',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true) ~> source1",
+						"source1 derive(AGE = year(currentDate()) - year(BIRTHDATE)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'parquet',",
+						"     fileSystem: 'processed',",
+						"     folderPath: 'patients',",
+						"     partitionFileNames:['patients_clean'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_Raw')]"
+			]
 		}
 	]
 }
