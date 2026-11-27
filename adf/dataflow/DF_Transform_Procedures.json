@@ -12,12 +12,16 @@
 					"name": "source1"
 				}
 			],
-			"sinks": [],
-			"transformations": [
+			"sinks": [
 				{
-					"name": "derivedColumn1"
+					"linkedService": {
+						"referenceName": "LS_ADLS_Raw",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink1"
 				}
 			],
+			"transformations": [],
 			"scriptLines": [
 				"source(output(",
 				"          START as string,",
@@ -42,7 +46,16 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '\\\"',",
 				"     columnNamesAsHeader: true) ~> source1",
-				"source1 derive(DURATION = toInteger((unixTimestamp(STOP) - unixTimestamp(START)) / 60)) ~> derivedColumn1"
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     fileSystem: 'processed',",
+				"     folderPath: 'procedures',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
