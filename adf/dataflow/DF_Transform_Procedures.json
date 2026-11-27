@@ -51,6 +51,7 @@
 				"     format: 'parquet',",
 				"     fileSystem: 'processed',",
 				"     folderPath: 'procedures',",
+				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
